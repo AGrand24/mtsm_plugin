@@ -83,19 +83,23 @@ class MTSMDialog(QtWidgets.QDialog, FORM_CLASS):
 		# http://qt-project.org/doc/qt-4.8/designer-using-a-ui-file.html
 		# #widgets-and-dialogs-with-auto-connect
 		self.setupUi(self)
+		dir=change_dir('project')[0]
+		
 		self.pb_clean_project.clicked.connect(self.clear_project)
 		self.pb_import_rec.clicked.connect(self.import_rec)
 		self.pb_export_backup.clicked.connect(self.export_backups)
 		self.rb_xml_read_full.toggled.connect(self.xml_full_reload)
 		self.rb_xml_read_smart.toggled.connect(self.xml_smart_reload)
 		self.pb_run_processing.clicked.connect(self.run_processing)
+		self.pb_qc_sensor_pos.clicked.connect(self.run_qc_sensor_pos)
 		self.sb_radius_search.valueChanged.connect(self.sb_radius_search_changed)
-		self.xml_reload_type='smart'
-		self.search_radius_value=self.sb_radius_search.value()
+		with open('search_radius.txt','r') as file:
+			self.sb_radius_search.setValue(int(file.read().strip()))
 
-		dir=change_dir('project')[0]
-		with open('fp_rec.txt','w') as file:
-			file.write(str(self.search_radius_value))
+		self.xml_reload_type='smart'
+		
+		with open('xml_reload_type.txt','w') as file:
+			file.write(str(self.xml_reload_type))
 		with open('search_radius.txt','w') as file:
 			file.write(str(self.search_radius_value))
 
@@ -154,3 +158,8 @@ class MTSMDialog(QtWidgets.QDialog, FORM_CLASS):
 		with open('search_radius.txt','w') as file:
 			file.write(str(self.search_radius_value))
 	
+	def run_qc_sensor_pos(self):
+		dir=change_dir('scripts')[2]
+		path=(dir+'run_check_sensor_pos.py')
+		subprocess.Popen(f"explorer {path}")
+		dir=change_dir('project')[0]
