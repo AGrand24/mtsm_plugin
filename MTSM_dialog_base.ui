@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MTSMDialogBase</class>
+ <widget class="QDialog" name="MTSMDialogBase">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MTSM</string>
+  </property>
+  <widget class="QPushButton" name="pb_clean_project">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>30</y>
+     <width>93</width>
+     <height>28</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string>Creates folder structure, clear databasases. Run only when starting new project or have backups.</string>
+   </property>
+   <property name="text">
+    <string>Clean project</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pb_import_rec">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>110</y>
+     <width>93</width>
+     <height>28</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string>Import FL and QC data from ascii backup into REC database.</string>
+   </property>
+   <property name="text">
+    <string>Import REC data</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pb_export_backup">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>150</y>
+     <width>93</width>
+     <height>28</height>
+    </rect>
+   </property>
+   <property name="mouseTracking">
+    <bool>false</bool>
+   </property>
+   <property name="toolTip">
+    <string>Export ascii backups of REC database and ID_xml and ID_rec match from XML database.</string>
+   </property>
+   <property name="text">
+    <string>Export backups</string>
+   </property>
+  </widget>
+  <widget class="QRadioButton" name="rb_xml_read_full">
+   <property name="geometry">
+    <rect>
+     <x>180</x>
+     <y>50</y>
+     <width>141</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string>Full reload reads all xml data in &quot;/ts&quot; directory.</string>
+   </property>
+   <property name="text">
+    <string>Full</string>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+  </widget>
+  <widget class="QRadioButton" name="rb_xml_read_smart">
+   <property name="geometry">
+    <rect>
+     <x>180</x>
+     <y>80</y>
+     <width>131</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string>Standard reloads only RECs with empty or Recording QC status.</string>
+   </property>
+   <property name="text">
+    <string>Standard</string>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lab_xml_reload">
+   <property name="geometry">
+    <rect>
+     <x>180</x>
+     <y>20</y>
+     <width>71</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>XML reload</string>
+   </property>
+   <property name="textFormat">
+    <enum>Qt::AutoText</enum>
+   </property>
+   <property name="wordWrap">
+    <bool>false</bool>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pb_run_processing">
+   <property name="geometry">
+    <rect>
+     <x>180</x>
+     <y>180</y>
+     <width>93</width>
+     <height>28</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string>Run main proccesing. Toogle smart/full to specify XML reload type.</string>
+   </property>
+   <property name="text">
+    <string>Run processing</string>
+   </property>
+  </widget>
+  <widget class="QSpinBox" name="sb_radius_search">
+   <property name="geometry">
+    <rect>
+     <x>180</x>
+     <y>140</y>
+     <width>101</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string>Distance [m] from SITE location used for matching ID_xml and ID_rec.</string>
+   </property>
+   <property name="suffix">
+    <string> m</string>
+   </property>
+   <property name="minimum">
+    <number>1</number>
+   </property>
+   <property name="maximum">
+    <number>999999</number>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>180</x>
+     <y>120</y>
+     <width>171</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>XML search radius</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

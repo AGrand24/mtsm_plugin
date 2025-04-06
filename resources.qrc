@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/plugins/MTSM" >
+        <file>icon.png</file>
+    </qresource>
+</RCC>
