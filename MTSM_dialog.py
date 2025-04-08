@@ -86,12 +86,15 @@ class MTSMDialog(QtWidgets.QDialog, FORM_CLASS):
 		dir=change_dir('project')[0]
 		
 		self.pb_clean_project.clicked.connect(self.clear_project)
-		self.pb_import_rec.clicked.connect(self.import_rec)
+		self.pb_import_rec.clicked.connect(self.run_import_rec)
 		self.pb_export_backup.clicked.connect(self.export_backups)
+		self.pb_qc_sensor_pos.clicked.connect(self.run_qc_sensor_pos)
+		self.pb_run_processing.clicked.connect(self.run_processing)
+		self.pb_dump_to_csv.clicked.connect(self.run_dump_to_csv)
+		
 		self.rb_xml_read_full.toggled.connect(self.xml_full_reload)
 		self.rb_xml_read_smart.toggled.connect(self.xml_smart_reload)
-		self.pb_run_processing.clicked.connect(self.run_processing)
-		self.pb_qc_sensor_pos.clicked.connect(self.run_qc_sensor_pos)
+		
 		self.sb_radius_search.valueChanged.connect(self.sb_radius_search_changed)
 		with open('search_radius.txt','r') as file:
 			self.sb_radius_search.setValue(int(file.read().strip()))
@@ -118,7 +121,7 @@ class MTSMDialog(QtWidgets.QDialog, FORM_CLASS):
 	
 
 
-	def import_rec(self):
+	def run_import_rec(self):
 		dir=change_dir('project')[0]
 		fpath, filter = QtWidgets.QFileDialog.getOpenFileName(self, 'Choose file', 'MTSM_data_backup\rec_import_export', 'REC data (*.rec)')
 		print(fpath)
@@ -126,7 +129,7 @@ class MTSMDialog(QtWidgets.QDialog, FORM_CLASS):
 			with open('fp_rec.txt','w') as file:
 				file.write(fpath)
 			dir=change_dir('scripts')[2]
-			path=(dir+'run_rec_import.py')
+			path=(dir+'run_import_rec.py')
 			subprocess.Popen(f"explorer {path}")
 			dir=change_dir('project')[0]
 
@@ -163,3 +166,11 @@ class MTSMDialog(QtWidgets.QDialog, FORM_CLASS):
 		path=(dir+'run_check_sensor_pos.py')
 		subprocess.Popen(f"explorer {path}")
 		dir=change_dir('project')[0]
+
+	def run_dump_to_csv(self):
+		dir=change_dir('scripts')[2]
+		path=(dir+'run_dump_csv.py')
+		subprocess.Popen(f"explorer {path}")
+		dir=change_dir('project')[0]
+
+	
