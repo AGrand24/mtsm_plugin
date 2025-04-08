@@ -123,7 +123,7 @@ class MTSMDialog(QtWidgets.QDialog, FORM_CLASS):
 
 	def run_import_rec(self):
 		dir=change_dir('project')[0]
-		fpath, filter = QtWidgets.QFileDialog.getOpenFileName(self, 'Choose file', 'MTSM_data_backup\rec_import_export', 'REC data (*.rec)')
+		fpath, filter = QtWidgets.QFileDialog.getOpenFileName(self, 'Choose file', 'MTSM_qgis\\rec_import_export', 'REC data (*.rec)')
 		print(fpath)
 		if fpath:
 			with open('fp_rec.txt','w') as file:
