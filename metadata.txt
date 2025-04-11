@@ -12,8 +12,8 @@ email=adam.grand@gmail.com
 
 about=C:\Users\adamg\AppData\Roaming\QGIS\QGIS3\profiles\default\mtsm
 
-tracker=http://bugs
-repository=http://repo
+tracker=https://github.com/AGrand24/mtsm_plugin
+repository=https://github.com/AGrand24/mtsm_plugin
 # End of mandatory metadata
 
 # Recommended items:
@@ -40,7 +40,7 @@ deprecated=False
 # plugin_dependencies=
 
 Category of the plugin: Raster, Vector, Database or Web
-# category=
+# category=Database
 
 # If the plugin can run on QGIS Server.
 server=False
