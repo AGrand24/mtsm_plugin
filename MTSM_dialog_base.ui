@@ -29,7 +29,7 @@
     <string>Creates folder structure, clear databasases. Run only when starting new project or have backups.</string>
    </property>
    <property name="text">
-    <string>Clean project</string>
+    <string>Reset project</string>
    </property>
    <property name="autoDefault">
     <bool>true</bool>
