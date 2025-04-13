@@ -91,6 +91,8 @@ class MTSMDialog(QtWidgets.QDialog, FORM_CLASS):
 		self.pb_qc_sensor_pos.clicked.connect(self.run_qc_sensor_pos)
 		self.pb_run_processing.clicked.connect(self.run_processing)
 		self.pb_dump_to_csv.clicked.connect(self.run_dump_to_csv)
+		self.pb_qc_checks.clicked.connect(self.run_qc_checks)
+		self.pb_replot_edi.clicked.connect(self.run_replot_edi)
 		
 		self.rb_xml_read_full.toggled.connect(self.xml_full_reload)
 		self.rb_xml_read_smart.toggled.connect(self.xml_smart_reload)
@@ -173,4 +175,15 @@ class MTSMDialog(QtWidgets.QDialog, FORM_CLASS):
 		subprocess.Popen(f"explorer {path}")
 		dir=change_dir('project')[0]
 
+	def run_qc_checks(self):
+		dir=change_dir('scripts')[2]
+		path=(dir+'run_qc.py')
+		subprocess.Popen(f"explorer {path}")
+		dir=change_dir('project')[0]
+
+	def run_replot_edi(self):
+		dir=change_dir('scripts')[2]
+		path=(dir+'run_replot_edi.py')
+		subprocess.Popen(f"explorer {path}")
+		dir=change_dir('project')[0]
 	

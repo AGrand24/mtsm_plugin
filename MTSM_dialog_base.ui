@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>532</width>
+    <width>435</width>
     <height>358</height>
    </rect>
   </property>
@@ -16,9 +16,9 @@
   <widget class="QPushButton" name="pb_clean_project">
    <property name="geometry">
     <rect>
-     <x>400</x>
-     <y>270</y>
-     <width>93</width>
+     <x>270</x>
+     <y>230</y>
+     <width>120</width>
      <height>28</height>
     </rect>
    </property>
@@ -208,7 +208,7 @@
     <string>XML search radius</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pb_qc_sensor_pos">
+  <widget class="QPushButton" name="pb_qc_checks">
    <property name="geometry">
     <rect>
      <x>270</x>
@@ -218,10 +218,10 @@
     </rect>
    </property>
    <property name="toolTip">
-    <string>Run check for sensor position inconsitencies between XML and FL data</string>
+    <string>Run QC checks</string>
    </property>
    <property name="text">
-    <string>Sensor pos.</string>
+    <string>Run QC checks</string>
    </property>
   </widget>
   <widget class="QLabel" name="lab_main_proc">
@@ -255,12 +255,12 @@
     <bool>false</bool>
    </property>
   </widget>
-  <widget class="QLabel" name="lab_main_proc_2">
+  <widget class="QLabel" name="lab_main_qc">
    <property name="geometry">
     <rect>
-     <x>220</x>
+     <x>270</x>
      <y>10</y>
-     <width>225</width>
+     <width>120</width>
      <height>16</height>
     </rect>
    </property>
@@ -286,7 +286,7 @@
     <bool>false</bool>
    </property>
   </widget>
-  <widget class="QLabel" name="lab_main_proc_3">
+  <widget class="QLabel" name="lab_import_export">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -328,6 +328,75 @@
    </property>
    <property name="text">
     <string>Export data to csv</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pb_qc_sensor_pos">
+   <property name="geometry">
+    <rect>
+     <x>270</x>
+     <y>70</y>
+     <width>120</width>
+     <height>28</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string>Run check for sensor position inconsitencies between XML and FL data</string>
+   </property>
+   <property name="text">
+    <string>Sensor pos.</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lab_other">
+   <property name="geometry">
+    <rect>
+     <x>270</x>
+     <y>170</y>
+     <width>120</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::NoFrame</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Plain</enum>
+   </property>
+   <property name="text">
+    <string>OTHER</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+   <property name="wordWrap">
+    <bool>false</bool>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pb_replot_edi">
+   <property name="geometry">
+    <rect>
+     <x>270</x>
+     <y>190</y>
+     <width>120</width>
+     <height>28</height>
+    </rect>
+   </property>
+   <property name="focusPolicy">
+    <enum>Qt::StrongFocus</enum>
+   </property>
+   <property name="toolTip">
+    <string>Delete all edi png files adn replot new.</string>
+   </property>
+   <property name="text">
+    <string>Replot edi img</string>
+   </property>
+   <property name="autoDefault">
+    <bool>true</bool>
    </property>
   </widget>
  </widget>
