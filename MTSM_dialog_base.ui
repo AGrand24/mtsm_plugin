@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>435</width>
-    <height>358</height>
+    <width>420</width>
+    <height>300</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -161,7 +161,7 @@
     <enum>Qt::StrongFocus</enum>
    </property>
    <property name="toolTip">
-    <string>Run main proccesing. Toogle smart/full to specify XML reload type.</string>
+    <string>Run main proccesing. Toogle standard/full to specify XML reload type.</string>
    </property>
    <property name="text">
     <string>Run processing</string>
@@ -321,7 +321,7 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>270</y>
+     <y>260</y>
      <width>200</width>
      <height>28</height>
     </rect>
@@ -381,7 +381,7 @@
    <property name="geometry">
     <rect>
      <x>270</x>
-     <y>190</y>
+     <y>200</y>
      <width>120</width>
      <height>28</height>
     </rect>
