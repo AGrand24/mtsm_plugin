@@ -283,6 +283,7 @@ class MTSMDialog(QtWidgets.QDialog, FORM_CLASS):
 			pdf_partial=report_export_atlas('mtsm_report_timeline',pdf_partial)
 		pdf_partial=report_export_atlas('mtsm_report_db',pdf_partial)
 		pdf_partial=report_export_layout('mtsm_report_eq_prs',pdf_partial)
+		pdf_partial=report_export_atlas('mtsm_report_pd',pdf_partial)
 
 		self.merge_pdf(pdf_partial)
 		self.msg_box_report()
