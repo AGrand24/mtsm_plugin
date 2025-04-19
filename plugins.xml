@@ -1,6 +1,6 @@
 <?xml version="0.1"?>
 <plugins>
-    <pyqgis_plugin name="MTSM" version="0.5">
+    <pyqgis_plugin name="MTSM" version="0.5.1">
         <description>MTSM GUI and script executor.</description>
         <qgis_minimum_version>3.4</qgis_minimum_version>
         <author_name>Adam Grand</author_name>
