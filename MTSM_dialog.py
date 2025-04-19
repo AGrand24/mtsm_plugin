@@ -39,12 +39,15 @@
 
 from qgis.PyQt import uic
 from qgis.PyQt import QtWidgets
-from qgis.core import QgsProject
+from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox, QPushButton
+from qgis.core import QgsProject,QgsLayoutExporter,QgsRenderContext
+from PyPDF2 import PdfMerger
+
 
 import os
 import subprocess
 import sys
-
+from datetime import date
 def change_dir(folder):
 	dir_qgis=QgsProject.instance().homePath()
 	dir_project=dir_qgis.replace("MTSM_qgis","").replace("/","\\")
@@ -84,7 +87,12 @@ class MTSMDialog(QtWidgets.QDialog, FORM_CLASS):
 		# #widgets-and-dialogs-with-auto-connect
 		self.setupUi(self)
 		dir=change_dir('project')[0]
-		
+
+		self.load_values()
+
+		self.de_report_date.setDate(date.today())
+		self.value_de_report_date=self.de_report_date.date()
+
 		self.pb_clean_project.clicked.connect(self.clear_project)
 		self.pb_import_rec.clicked.connect(self.run_import_rec)
 		self.pb_export_backup.clicked.connect(self.export_backups)
@@ -93,21 +101,60 @@ class MTSMDialog(QtWidgets.QDialog, FORM_CLASS):
 		self.pb_dump_to_csv.clicked.connect(self.run_dump_to_csv)
 		self.pb_qc_checks.clicked.connect(self.run_qc_checks)
 		self.pb_replot_edi.clicked.connect(self.run_replot_edi)
+		self.pb_export_report.clicked.connect(self.run_export_report)
+		self.pb_generate_report.clicked.connect(self.run_generate_report)
+
 		
 		self.rb_xml_read_full.toggled.connect(self.xml_full_reload)
 		self.rb_xml_read_smart.toggled.connect(self.xml_smart_reload)
 		
 		self.sb_radius_search.valueChanged.connect(self.sb_radius_search_changed)
-		with open('search_radius.txt','r') as file:
-			self.sb_radius_search.setValue(int(file.read().strip()))
+		self.sb_tl_range.valueChanged.connect(self.sb_tl_range_changed)
+		self.sb_tl_page_range.valueChanged.connect(self.sb_tl_page_range_changed)
+		self.de_report_date.dateChanged.connect(self.de_report_date_changed)
 
-		self.xml_reload_type='smart'
+		self.value_xml_reload_type='smart'
+		self.write_values()
+
+	def load_values(self):
+		try:
+			with open('search_radius.txt','r') as file:
+				self.sb_radius_search.setValue(int(file.read().strip()))
+				
+		except:
+				self.sb_radius_search.setValue(100)
+		try:
+			with open('tl_range.txt','r') as file:
+				self.sb_tl_range.setValue(int(file.read().strip()))
+		except:
+				self.sb_tl_range.setValue(2)
+		try:
+			with open('tl_page_range.txt','r') as file:
+				self.sb_tl_page_range.setValue(int(file.read().strip()))
+		except:
+				self.sb_tl_page_range.setValue(2)
 		
-		with open('xml_reload_type.txt','w') as file:
-			file.write(str(self.xml_reload_type))
-		with open('search_radius.txt','w') as file:
-			file.write(str(self.search_radius_value))
+		self.value_search_radius=self.sb_radius_search.value()
+		self.value_tl_range=self.sb_tl_range.value()
+		self.value_tl_page_range=self.sb_tl_page_range.value()
+		
+		return self
 
+	def write_values(self):
+		with open('xml_reload_type.txt','w') as file:
+			file.write(str(self.value_xml_reload_type))
+		with open('search_radius.txt','w') as file:
+			file.write(str(self.sb_radius_search.value()))
+
+		with open('tl_range.txt','w') as file:
+			file.write(str(self.value_tl_range))
+
+		with open('tl_page_range.txt','w') as file:
+			file.write(str(self.value_tl_page_range))
+
+		with open('report_date.txt','w') as file:
+			file.write(self.value_de_report_date.toString("yyyy-MM-dd") )
+	
 	def clear_project(self):
 		reply= QtWidgets.QMessageBox.question(self,'Clean project','This will delete all Rec and Xml data and reload clean project. Are you sure?',
 		QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No,QtWidgets.QMessageBox.No)
@@ -120,7 +167,6 @@ class MTSMDialog(QtWidgets.QDialog, FORM_CLASS):
 			subprocess.Popen(f"explorer {path}")
 		else:
 			print('NO')
-	
 
 
 	def run_import_rec(self):
@@ -141,17 +187,17 @@ class MTSMDialog(QtWidgets.QDialog, FORM_CLASS):
 		subprocess.Popen(f"explorer {path}")
 
 	def xml_full_reload(self):
-		self.xml_reload_type='full'
-		print(self.xml_reload_type)
+		self.value_xml_reload_type='full'
+		print(self.value_xml_reload_type)
 
 	def xml_smart_reload(self):
-		self.xml_reload_type='smart'
-		print(self.xml_reload_type)
+		self.value_xml_reload_type='smart'
+		print(self.value_xml_reload_type)
 
 	def run_processing(self):
 		dir=change_dir('project')[0]
 		with open('xml_reload_type.txt','w') as file:
-			file.write(self.xml_reload_type)
+			file.write(self.value_xml_reload_type)
 		dir=change_dir('scripts')[2]
 		path=(dir+'run_main_proc.py')
 		subprocess.Popen(f"explorer {path}")
@@ -159,9 +205,27 @@ class MTSMDialog(QtWidgets.QDialog, FORM_CLASS):
 	
 	def sb_radius_search_changed(self):
 		dir=change_dir('project')[0]
-		self.search_radius_value = self.sb_radius_search.value()
+		self.value_search_radius = self.sb_radius_search.value()
 		with open('search_radius.txt','w') as file:
-			file.write(str(self.search_radius_value))
+			file.write(str(self.value_search_radius))
+
+	def sb_tl_range_changed(self):
+		dir=change_dir('project')[0]
+		self.value_tl_range = self.sb_tl_range.value()
+		with open('tl_range.txt','w') as file:
+			file.write(str(self.value_tl_range))
+	
+	def sb_tl_page_range_changed(self):
+		dir=change_dir('project')[0]
+		self.value_tl_page_range = self.sb_tl_page_range.value()
+		with open('tl_page_range.txt','w') as file:
+			file.write(str(self.value_tl_page_range))
+
+	def de_report_date_changed(self):
+		dir=change_dir('project')[0]
+		self.value_de_report_date = self.de_report_date.date()
+		with open('report_date.txt','w') as file:
+			file.write(str(self.value_de_report_date.toString("yyyy-MM-dd") ))
 	
 	def run_qc_sensor_pos(self):
 		dir=change_dir('scripts')[2]
@@ -186,4 +250,97 @@ class MTSMDialog(QtWidgets.QDialog, FORM_CLASS):
 		path=(dir+'run_replot_edi.py')
 		subprocess.Popen(f"explorer {path}")
 		dir=change_dir('project')[0]
+
+	def run_generate_report(self):
+		dir=change_dir('scripts')[2]
+		path=(dir+'run_report.py')
+		subprocess.Popen(f"explorer {path}")
+		dir=change_dir('project')[0]
 	
+	def run_export_report(self):
+		dir=change_dir('project')[0]
+		report_export_map()
+		report_export_db()	
+		report_export_header()
+		pdf_partial=[f"tmp/mtsm_rep_partial_report_header.pdf",f"tmp/mtsm_rep_partial_map.pdf",f"tmp/mtsm_rep_partial_report_db.pdf"]
+		if self.cb_report_timeline.isChecked():
+			report_export_tl()
+			pdf_partial.append('tmp/mtsm_rep_partial_tl.pdf')
+		
+		merge_pdf(pdf_partial)
+		self.msg_box_report()
+	def msg_box_report(self):
+		msg_box = QMessageBox()
+		msg_box.setIcon(QMessageBox.Information)
+		msg_box.setWindowTitle("Export finished!")
+		msg_box.setText("Export finished! Open file?")
+		msg_box.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+		response = msg_box.exec_()
+		if response == QMessageBox.Ok:
+			path=('reports\\mtsm_report.pdf')
+			subprocess.Popen(f"explorer {path}")
+
+
+
+
+def report_export_map():
+	project = QgsProject.instance()
+	layoutName='mtsm_report_map'
+	layout = project.layoutManager().layoutByName(layoutName)
+	myAtlas=layout.atlas()
+	exporter = QgsLayoutExporter(myAtlas.layout())
+	pdf_settings=report_get_pdf_settings()
+	exporter.exportToPdf(myAtlas, 'tmp/mtsm_rep_partial_map.pdf', pdf_settings)
+
+def report_export_tl():
+	project = QgsProject.instance()
+	layoutName='mtsm_report_timeline'
+	layout = project.layoutManager().layoutByName(layoutName)
+	myAtlas=layout.atlas()
+	exporter = QgsLayoutExporter(myAtlas.layout())
+	pdf_settings=report_get_pdf_settings()
+	exporter.exportToPdf(myAtlas, 'tmp/mtsm_rep_partial_tl.pdf', pdf_settings)
+
+def report_export_db():
+	project = QgsProject.instance()
+	layoutName='mtsm_report_db'
+	layout = project.layoutManager().layoutByName(layoutName)
+	myAtlas=layout.atlas()
+	exporter = QgsLayoutExporter(myAtlas.layout())
+	pdf_settings=report_get_pdf_settings()
+	exporter.exportToPdf(myAtlas, f"tmp/mtsm_rep_partial_report_db.pdf", pdf_settings)
+
+# def report_export_report():
+# 	layout_manager = QgsProject.instance().layoutManager()
+# 	report = layout_manager.layoutByName("mtsm_report")
+# 	pdf_settings=report_get_pdf_settings()
+# 	output = f"tmp/mtsm_rep_partial_report_db.pdf"
+
+# 	result, error = QgsLayoutExporter.exportToPdf(report, output, pdf_settings)
+
+def report_export_header():
+	manager = QgsProject.instance().layoutManager()
+	layout = manager.layoutByName("mtsm_report_header")  # name of the layout 
+	exporter = QgsLayoutExporter(layout)
+	pdf_settings=report_get_pdf_settings()
+	output = f"tmp/mtsm_rep_partial_report_header.pdf"
+	exporter.exportToPdf(output,pdf_settings)
+
+def report_get_pdf_settings():
+	pdf_settings = QgsLayoutExporter.PdfExportSettings()
+	pdf_settings.forceVectorOutput = False
+	pdf_settings.exportMetadata = False # default True
+	pdf_settings.rasterizeWholeImage = False # default False
+	pdf_settings.textRenderFormat = QgsRenderContext.TextFormatAlwaysText
+	return pdf_settings
+
+def merge_pdf(pdf_partial):
+	output_file = "reports/mtsm_report.pdf"
+	merger = PdfMerger()
+
+	for pdf in pdf_partial:
+		merger.append(pdf)
+
+	merger.write(output_file)
+	merger.close()
+
