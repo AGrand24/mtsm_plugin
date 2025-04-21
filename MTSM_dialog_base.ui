@@ -321,7 +321,7 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>580</y>
+     <y>570</y>
      <width>200</width>
      <height>28</height>
     </rect>
@@ -697,6 +697,25 @@
    </property>
    <property name="wordWrap">
     <bool>false</bool>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pb_import_sites_csv">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>600</y>
+     <width>200</width>
+     <height>28</height>
+    </rect>
+   </property>
+   <property name="focusPolicy">
+    <enum>Qt::StrongFocus</enum>
+   </property>
+   <property name="toolTip">
+    <string>Import FL and QC data from ascii backup into REC database.</string>
+   </property>
+   <property name="text">
+    <string>Import sites from csv</string>
    </property>
   </widget>
  </widget>

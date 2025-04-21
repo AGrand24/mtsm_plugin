@@ -95,6 +95,7 @@ class MTSMDialog(QtWidgets.QDialog, FORM_CLASS):
 
 		self.pb_clean_project.clicked.connect(self.clear_project)
 		self.pb_import_rec.clicked.connect(self.run_import_rec)
+		self.pb_import_sites_csv.clicked.connect(self.run_import_sites_csv)
 		self.pb_export_backup.clicked.connect(self.export_backups)
 		self.pb_qc_sensor_pos.clicked.connect(self.run_qc_sensor_pos)
 		self.pb_run_processing.clicked.connect(self.run_processing)
@@ -181,6 +182,18 @@ class MTSMDialog(QtWidgets.QDialog, FORM_CLASS):
 			subprocess.Popen(f"explorer {path}")
 			dir=change_dir('project')[0]
 
+	def run_import_sites_csv(self):
+		dir=change_dir('project')[0]
+		fpath, filter = QtWidgets.QFileDialog.getOpenFileName(self, 'Choose file', '', 'csv (*.csv)')
+		print(fpath)
+		if fpath:
+			with open('fp_sites_csv.txt','w') as file:
+				file.write(fpath)
+			dir=change_dir('scripts')[2]
+			path=(dir+'run_import_sites_csv.py')
+			subprocess.Popen(f"explorer {path}")
+			dir=change_dir('project')[0]
+
 	def export_backups(self):
 		dir=change_dir('scripts')[2]
 		path=(dir+'run_export_backup.py')
@@ -257,20 +270,6 @@ class MTSMDialog(QtWidgets.QDialog, FORM_CLASS):
 		subprocess.Popen(f"explorer {path}")
 		dir=change_dir('project')[0]
 	
-	# def run_export_report(self):
-	# 	dir=change_dir('project')[0]
-	# 	report_export_map()
-	# 	report_export_db()	
-	# 	report_export_header()
-	# 	pdf_partial=[f"tmp/mtsm_rep_partial_report_header.pdf",f"tmp/mtsm_rep_partial_map.pdf"]
-	# 	if self.cb_report_timeline.isChecked():
-	# 		report_export_tl()
-	# 		pdf_partial.append('tmp/mtsm_rep_partial_tl.pdf')
-	# 	pdf_partial.append(f"tmp/mtsm_rep_partial_report_db.pdf")
-		
-	# 	self.merge_pdf(pdf_partial)
-	# 	self.msg_box_report()
-
 	def run_export_report(self):
 		dir=change_dir('project')[0]
 		pdf_partial=[]
@@ -331,49 +330,7 @@ def report_export_atlas(layout_name,pdf_partial):
 	exporter.exportToPdf(atlas, fp_out, pdf_settings)
 	pdf_partial.append(fp_out)
 	return pdf_partial
-
-# def report_export_map():
-# 	project = QgsProject.instance()
-# 	layoutName='mtsm_report_map'
-# 	layout = project.layoutManager().layoutByName(layoutName)
-# 	myAtlas=layout.atlas()
-# 	exporter = QgsLayoutExporter(myAtlas.layout())
-# 	pdf_settings=report_get_pdf_settings()
-# 	exporter.exportToPdf(myAtlas, 'tmp/mtsm_rep_partial_map.pdf', pdf_settings)
-
-# def report_export_tl():
-# 	project = QgsProject.instance()
-# 	layoutName='mtsm_report_timeline'
-# 	layout = project.layoutManager().layoutByName(layoutName)
-# 	myAtlas=layout.atlas()
-# 	exporter = QgsLayoutExporter(myAtlas.layout())
-# 	pdf_settings=report_get_pdf_settings()
-# 	exporter.exportToPdf(myAtlas, 'tmp/mtsm_rep_partial_tl.pdf', pdf_settings)
-
-# def report_export_db():
-# 	project = QgsProject.instance()
-# 	layoutName='mtsm_report_db'
-# 	layout = project.layoutManager().layoutByName(layoutName)
-# 	myAtlas=layout.atlas()
-# 	exporter = QgsLayoutExporter(myAtlas.layout())
-# 	pdf_settings=report_get_pdf_settings()
-# 	exporter.exportToPdf(myAtlas, f"tmp/mtsm_rep_partial_report_db.pdf", pdf_settings)
-
-# # def report_export_report():
-# # 	layout_manager = QgsProject.instance().layoutManager()
-# # 	report = layout_manager.layoutByName("mtsm_report")
-# # 	pdf_settings=report_get_pdf_settings()
-# # 	output = f"tmp/mtsm_rep_partial_report_db.pdf"
-
-# # 	result, error = QgsLayoutExporter.exportToPdf(report, output, pdf_settings)
-
-# def report_export_header():
-# 	manager = QgsProject.instance().layoutManager()
-# 	layout = manager.layoutByName("mtsm_report_header")  # name of the layout 
-# 	exporter = QgsLayoutExporter(layout)
-# 	pdf_settings=report_get_pdf_settings()
-# 	output = f"tmp/mtsm_rep_partial_report_header.pdf"
-# 	exporter.exportToPdf(output,pdf_settings)
+#
 
 def report_get_pdf_settings():
 	pdf_settings = QgsLayoutExporter.PdfExportSettings()
