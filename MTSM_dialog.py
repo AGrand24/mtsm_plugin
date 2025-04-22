@@ -68,9 +68,6 @@ def run_script():
 				file.close()
 
 
-
-
-
 # This loads your .ui file so that PyQt can populate your plugin with the elements from Qt Designer
 FORM_CLASS, _ = uic.loadUiType(os.path.join(
 	os.path.dirname(__file__), 'MTSM_dialog_base.ui'))
@@ -86,15 +83,6 @@ class MTSMDialog(QtWidgets.QDialog, FORM_CLASS):
 		# http://qt-project.org/doc/qt-4.8/designer-using-a-ui-file.html
 		# #widgets-and-dialogs-with-auto-connect
 		self.setupUi(self)
-		project = QgsProject.instance()
-		if not project.fileName():
-			self.msg_box_open_project()
-
-
-		# dir=change_dir('project')[0]
-
-		self.load_values()
-
 		self.de_report_date.setDate(date.today())
 		self.value_de_report_date=self.de_report_date.date()
 
@@ -121,25 +109,40 @@ class MTSMDialog(QtWidgets.QDialog, FORM_CLASS):
 		self.de_report_date.dateChanged.connect(self.de_report_date_changed)
 
 		self.value_xml_reload_type='smart'
+	
+	def close_window(self):
+		self.close()
+	
+	def showEvent(self,event):
+		super().showEvent(event)
+		project = QgsProject.instance()
+
+		if project.fileName():
+			self.init_project()
+		else:
+			self.msg_box_open_project()
+			# self.close_window()
+
+
+	def init_project(self):
+		dir=change_dir('project')[0]
+		self.load_values()
 		self.write_values()
 
 	def load_values(self):
-		abspath=os.path.abspath(__file__)
-		dname=os.path.dirname(abspath)
-		os.chdir(dname)
 		try:
-			with open('search_radius.val','r') as file:
+			with open('search_radius.txt','r') as file:
 				self.sb_radius_search.setValue(int(file.read().strip()))
 				
 		except:
 				self.sb_radius_search.setValue(100)
 		try:
-			with open('tl_range.val','r') as file:
+			with open('tl_range.txt','r') as file:
 				self.sb_tl_range.setValue(int(file.read().strip()))
 		except:
 				self.sb_tl_range.setValue(2)
 		try:
-			with open('tl_page_range.val','r') as file:
+			with open('tl_page_range.txt','r') as file:
 				self.sb_tl_page_range.setValue(int(file.read().strip()))
 		except:
 				self.sb_tl_page_range.setValue(2)
@@ -149,28 +152,20 @@ class MTSMDialog(QtWidgets.QDialog, FORM_CLASS):
 		self.value_tl_page_range=self.sb_tl_page_range.value()
 		
 		return self
-	
-	def closeEvent(self,event):
-		self.write_values()
-		event.accept()
 
 	def write_values(self):
-		abspath=os.path.abspath(__file__)
-		dname=os.path.dirname(abspath)
-		os.chdir(dname)
-
-		with open('xml_reload_type.val','w') as file:
+		with open('xml_reload_type.txt','w') as file:
 			file.write(str(self.value_xml_reload_type))
-		with open('search_radius.val','w') as file:
+		with open('search_radius.txt','w') as file:
 			file.write(str(self.sb_radius_search.value()))
 
-		with open('tl_range.val','w') as file:
+		with open('tl_range.txt','w') as file:
 			file.write(str(self.value_tl_range))
 
-		with open('tl_page_range.val','w') as file:
+		with open('tl_page_range.txt','w') as file:
 			file.write(str(self.value_tl_page_range))
 
-		with open('report_date.val','w') as file:
+		with open('report_date.txt','w') as file:
 			file.write(self.value_de_report_date.toString("yyyy-MM-dd") )
 	
 	def clear_project(self):
