@@ -6,7 +6,7 @@
 name=MTSM
 qgisMinimumVersion=3.0
 description=MT survey manager
-version=1.0
+version=1.1
 author=Adam Grand
 email=adam.grand@gmail.com
 
