@@ -126,23 +126,25 @@ class MTSMDialog(QtWidgets.QDialog, FORM_CLASS):
 
 	def init_project(self):
 		dir=change_dir('project')[0]
+		if not os.path.exists('tmp/'):
+			os.mkdir('tmp/')
 		self.load_values()
 		self.write_values()
 
 	def load_values(self):
 		try:
-			with open('search_radius.txt','r') as file:
+			with open('tmp/search_radius.txt','r') as file:
 				self.sb_radius_search.setValue(int(file.read().strip()))
 				
 		except:
 				self.sb_radius_search.setValue(100)
 		try:
-			with open('tl_range.txt','r') as file:
+			with open('tmp/tl_range.txt','r') as file:
 				self.sb_tl_range.setValue(int(file.read().strip()))
 		except:
 				self.sb_tl_range.setValue(2)
 		try:
-			with open('tl_page_range.txt','r') as file:
+			with open('tmp/tl_page_range.txt','r') as file:
 				self.sb_tl_page_range.setValue(int(file.read().strip()))
 		except:
 				self.sb_tl_page_range.setValue(2)
@@ -154,18 +156,18 @@ class MTSMDialog(QtWidgets.QDialog, FORM_CLASS):
 		return self
 
 	def write_values(self):
-		with open('xml_reload_type.txt','w') as file:
+		with open('tmp/xml_reload_type.txt','w') as file:
 			file.write(str(self.value_xml_reload_type))
-		with open('search_radius.txt','w') as file:
+		with open('tmp/search_radius.txt','w') as file:
 			file.write(str(self.sb_radius_search.value()))
 
-		with open('tl_range.txt','w') as file:
+		with open('tmp/tl_range.txt','w') as file:
 			file.write(str(self.value_tl_range))
 
-		with open('tl_page_range.txt','w') as file:
+		with open('tmp/tl_page_range.txt','w') as file:
 			file.write(str(self.value_tl_page_range))
 
-		with open('report_date.txt','w') as file:
+		with open('tmp/report_date.txt','w') as file:
 			file.write(self.value_de_report_date.toString("yyyy-MM-dd") )
 	
 	def clear_project(self):
@@ -187,7 +189,7 @@ class MTSMDialog(QtWidgets.QDialog, FORM_CLASS):
 		fpath, filter = QtWidgets.QFileDialog.getOpenFileName(self, 'Choose file', 'MTSM_qgis\\rec_import_export', 'REC data (*.rec)')
 		print(fpath)
 		if fpath:
-			with open('fp_rec.txt','w') as file:
+			with open('tmp/fp_rec.txt','w') as file:
 				file.write(fpath)
 			dir=change_dir('scripts')[2]
 			path=(dir+'run_import_rec.py')
@@ -199,7 +201,7 @@ class MTSMDialog(QtWidgets.QDialog, FORM_CLASS):
 		fpath, filter = QtWidgets.QFileDialog.getOpenFileName(self, 'Choose file', '', 'csv (*.csv)')
 		print(fpath)
 		if fpath:
-			with open('fp_sites_csv.txt','w') as file:
+			with open('tmp/fp_sites_csv.txt','w') as file:
 				file.write(fpath)
 			dir=change_dir('scripts')[2]
 			path=(dir+'run_import_sites_csv.py')
@@ -221,7 +223,7 @@ class MTSMDialog(QtWidgets.QDialog, FORM_CLASS):
 
 	def run_processing(self):
 		dir=change_dir('project')[0]
-		with open('xml_reload_type.txt','w') as file:
+		with open('tmp/xml_reload_type.txt','w') as file:
 			file.write(self.value_xml_reload_type)
 		dir=change_dir('scripts')[2]
 		path=(dir+'run_main_proc.py')
@@ -232,25 +234,25 @@ class MTSMDialog(QtWidgets.QDialog, FORM_CLASS):
 	def sb_radius_search_changed(self):
 		dir=change_dir('project')[0]
 		self.value_search_radius = self.sb_radius_search.value()
-		with open('search_radius.txt','w') as file:
+		with open('tmp/search_radius.txt','w') as file:
 			file.write(str(self.value_search_radius))
 
 	def sb_tl_range_changed(self):
 		dir=change_dir('project')[0]
 		self.value_tl_range = self.sb_tl_range.value()
-		with open('tl_range.txt','w') as file:
+		with open('tmp/tl_range.txt','w') as file:
 			file.write(str(self.value_tl_range))
 	
 	def sb_tl_page_range_changed(self):
 		dir=change_dir('project')[0]
 		self.value_tl_page_range = self.sb_tl_page_range.value()
-		with open('tl_page_range.txt','w') as file:
+		with open('tmp/tl_page_range.txt','w') as file:
 			file.write(str(self.value_tl_page_range))
 
 	def de_report_date_changed(self):
 		dir=change_dir('project')[0]
 		self.value_de_report_date = self.de_report_date.date()
-		with open('report_date.txt','w') as file:
+		with open('tmp/report_date.txt','w') as file:
 			file.write(str(self.value_de_report_date.toString("yyyy-MM-dd")))
 	
 	def run_qc_sensor_pos(self):
