@@ -104,6 +104,7 @@ class MTSMDialog(QtWidgets.QDialog, FORM_CLASS):
 		self.pb_replot_edi.clicked.connect(self.run_replot_edi)
 		self.pb_export_report.clicked.connect(self.run_export_report)
 		self.pb_generate_report.clicked.connect(self.run_generate_report)
+		self.pb_install_packages.clicked.connect(self.run_install_py_packages)
 
 		
 		self.rb_xml_read_full.toggled.connect(self.xml_full_reload)
@@ -267,6 +268,12 @@ class MTSMDialog(QtWidgets.QDialog, FORM_CLASS):
 	def run_generate_report(self):
 		dir=change_dir('scripts')[2]
 		path=(dir+'run_report.py')
+		subprocess.Popen(f"explorer {path}")
+		dir=change_dir('project')[0]
+
+	def run_install_py_packages(self):
+		dir=change_dir('scripts')[2]
+		path=(dir+'run_install_packages.py')
 		subprocess.Popen(f"explorer {path}")
 		dir=change_dir('project')[0]
 	
