@@ -227,6 +227,7 @@ class MTSMDialog(QtWidgets.QDialog, FORM_CLASS):
 		path=(dir+'run_main_proc.py')
 		subprocess.Popen(f"explorer {path}")
 		dir=change_dir('project')[0]
+		self.close_window()
 	
 	def sb_radius_search_changed(self):
 		dir=change_dir('project')[0]
@@ -281,6 +282,7 @@ class MTSMDialog(QtWidgets.QDialog, FORM_CLASS):
 		path=(dir+'run_report.py')
 		subprocess.Popen(f"explorer {path}")
 		dir=change_dir('project')[0]
+
 
 	def run_install_py_packages(self):
 		dir=change_dir('scripts')[2]
