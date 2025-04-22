@@ -86,7 +86,12 @@ class MTSMDialog(QtWidgets.QDialog, FORM_CLASS):
 		# http://qt-project.org/doc/qt-4.8/designer-using-a-ui-file.html
 		# #widgets-and-dialogs-with-auto-connect
 		self.setupUi(self)
-		dir=change_dir('project')[0]
+		project = QgsProject.instance()
+		if not project.fileName():
+			self.msg_box_open_project()
+
+
+		# dir=change_dir('project')[0]
 
 		self.load_values()
 
@@ -119,19 +124,22 @@ class MTSMDialog(QtWidgets.QDialog, FORM_CLASS):
 		self.write_values()
 
 	def load_values(self):
+		abspath=os.path.abspath(__file__)
+		dname=os.path.dirname(abspath)
+		os.chdir(dname)
 		try:
-			with open('search_radius.txt','r') as file:
+			with open('search_radius.val','r') as file:
 				self.sb_radius_search.setValue(int(file.read().strip()))
 				
 		except:
 				self.sb_radius_search.setValue(100)
 		try:
-			with open('tl_range.txt','r') as file:
+			with open('tl_range.val','r') as file:
 				self.sb_tl_range.setValue(int(file.read().strip()))
 		except:
 				self.sb_tl_range.setValue(2)
 		try:
-			with open('tl_page_range.txt','r') as file:
+			with open('tl_page_range.val','r') as file:
 				self.sb_tl_page_range.setValue(int(file.read().strip()))
 		except:
 				self.sb_tl_page_range.setValue(2)
@@ -141,20 +149,28 @@ class MTSMDialog(QtWidgets.QDialog, FORM_CLASS):
 		self.value_tl_page_range=self.sb_tl_page_range.value()
 		
 		return self
+	
+	def closeEvent(self,event):
+		self.write_values()
+		event.accept()
 
 	def write_values(self):
-		with open('xml_reload_type.txt','w') as file:
+		abspath=os.path.abspath(__file__)
+		dname=os.path.dirname(abspath)
+		os.chdir(dname)
+
+		with open('xml_reload_type.val','w') as file:
 			file.write(str(self.value_xml_reload_type))
-		with open('search_radius.txt','w') as file:
+		with open('search_radius.val','w') as file:
 			file.write(str(self.sb_radius_search.value()))
 
-		with open('tl_range.txt','w') as file:
+		with open('tl_range.val','w') as file:
 			file.write(str(self.value_tl_range))
 
-		with open('tl_page_range.txt','w') as file:
+		with open('tl_page_range.val','w') as file:
 			file.write(str(self.value_tl_page_range))
 
-		with open('report_date.txt','w') as file:
+		with open('report_date.val','w') as file:
 			file.write(self.value_de_report_date.toString("yyyy-MM-dd") )
 	
 	def clear_project(self):
@@ -305,6 +321,14 @@ class MTSMDialog(QtWidgets.QDialog, FORM_CLASS):
 		if response == QMessageBox.Ok:
 			path=(f'reports\\mtsm_report{str(self.value_de_report_date.toString("_yyyy-MM-dd"))}.pdf')
 			subprocess.Popen(f"explorer {path}")
+
+	def msg_box_open_project(self):
+		msg_box = QMessageBox()
+		msg_box.setIcon(QMessageBox.Information)
+		# msg_box.setWindowTitle("Export finished!")
+		msg_box.setText("MTSM plugin need QGIS project! Open project first!")
+		msg_box.setStandardButtons(QMessageBox.Ok)
+		msg_box.exec_()
 
 	def merge_pdf(self,pdf_partial):
 		output_file=f'reports\\mtsm_report{str(self.value_de_report_date.toString("_yyyy-MM-dd"))}.pdf'
