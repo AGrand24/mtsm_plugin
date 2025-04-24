@@ -1,1 +1,1 @@
-Simple GUI for running MT Survey Manager processing scripts.
+MT Survey Manager GUI for running Python scripts.
